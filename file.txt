@@ -9,3 +9,4 @@ result = check_even_odd(number)
 
 print(f"{number} is {result}")
 print("Program executed successfully")
+print("hi")
