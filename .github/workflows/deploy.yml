@@ -50,6 +50,6 @@ jobs:
         run: |
           echo "[web]" > inventory
           echo "${{ steps.terraform_output.outputs.IP }}" >> inventory
-          ansible-playbook -i inventory ansible/install.nginx.yml\
+          ansible-playbook -i inventory ansible/install-nginx.yml\
             --private-key key.pem \
             -u ubuntu
