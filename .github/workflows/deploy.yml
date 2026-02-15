@@ -35,7 +35,7 @@ jobs:
         id: terraform_output
         working-directory: ./terraform
         run: |
-          IP=$(terraform output -raw instance_ip | head -n 1)
+          IP=$(terraform output -raw instance_ip)
           echo "IP=$IP" >> $GITHUB_OUTPUT
 
       - name: Setup SSH Key
@@ -45,11 +45,14 @@ jobs:
 
       - name: Install Ansible
         run: sudo apt update && sudo apt install -y ansible
-
+      - name: Wait for EC2to be ready
+        run: sleep 40
+        
       - name: Run Ansible Playbook
         run: |
           echo "[web]" > inventory
           echo "${{ steps.terraform_output.outputs.IP }}" >> inventory
-          ansible-playbook -i inventory ansible/install-nginx.yml\
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook -i inventory ansible/install-nginx.yml \
             --private-key key.pem \
             -u ubuntu
