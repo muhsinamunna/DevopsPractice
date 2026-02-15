@@ -34,7 +34,9 @@ jobs:
       - name: Get Public IP
         id: terraform_output
         working-directory: ./terraform
-        run: echo "IP=$(terraform output -raw instance_ip)" >> $GITHUB_OUTPUT
+        run: |
+          IP=$(terraform output -raw instance_ip | head -n 1)
+          echo "IP=$IP" >> $GITHUB_OUTPUT
 
       - name: Setup SSH Key
         run: |
